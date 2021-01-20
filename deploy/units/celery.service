@@ -1,0 +1,21 @@
+[Unit]
+Description=Run %p
+Requires=docker.service redis.service
+After=docker.service redis.service
+ 
+[Service]
+User=dhaval
+ 
+Restart=always
+ExecStartPre=-/usr/bin/docker kill %p
+ExecStartPre=-/usr/bin/docker rm -f %p
+ExecStart=/usr/bin/docker run --rm --name %p \
+    --network salaryte \
+    -v /home/dhaval/instance:/salaryte/instance \
+    salaryte celery worker -B -l info -A salaryte.blueprints.user.tasks \
+    %p
+
+ExecStop=/usr/bin/docker stop %p
+ 
+[Install]
+WantedBy=multi-user.target 
