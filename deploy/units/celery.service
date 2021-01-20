@@ -12,8 +12,7 @@ ExecStartPre=-/usr/bin/docker rm -f %p
 ExecStart=/usr/bin/docker run --rm --name %p \
     --network salaryte \
     -v /home/dhaval/instance:/salaryte/instance \
-    salaryte celery worker -B -l info -A salaryte.blueprints.user.tasks \
-    %p
+    %p celery worker -B -l info -A salaryte.blueprints.user.tasks
 
 ExecStop=/usr/bin/docker stop %p
  
